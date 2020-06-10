@@ -1,0 +1,21 @@
+Finding Numbers in a Haystack
+
+In this assignment you will read through and parse a file with text and numbers. 
+You will extract all the numbers in the file and compute the sum of the numbers.
+
+
+import re
+
+add=0
+total=0
+lst=list()
+hand=open('text.txt')
+for line in hand:
+    line=line.rstrip()
+    stuff=re.findall('([0-9]+)', line)
+    for word in stuff:
+        word=float(word)
+        lst.append(word)
+    
+    add=sum(lst)
+print(add)

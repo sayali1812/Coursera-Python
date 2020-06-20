@@ -1,0 +1,44 @@
+import urllib.request, urllib.parse, urllib.error
+import xml.etree.ElementTree as ET
+import ssl
+
+api_key = False
+# If you have a Google Places API key, enter it here
+# api_key = 'AIzaSy___IDByT70'
+# https://developers.google.com/maps/documentation/geocoding/intro
+
+if api_key is False:
+    api_key = 42
+    serviceurl = 'http://py4e-data.dr-chuck.net/xml?'
+else :
+    serviceurl = 'https://maps.googleapis.com/maps/api/geocode/xml?'
+
+# Ignore SSL certificate errors
+ctx = ssl.create_default_context()
+ctx.check_hostname = False
+ctx.verify_mode = ssl.CERT_NONE
+
+lst=list()
+
+url = input('Enter location: ')
+if(len(url)<1):
+    url='http://py4e-data.dr-chuck.net/comments_603843.xml'
+print('Retrieving', url)
+html = urllib.request.urlopen(url, context=ctx)
+
+data = html.read()
+print('Retrieved', len(data), 'characters')
+
+
+tree = ET.fromstring(data)
+
+counts = tree.findall('comments/comment/count')
+print('Count: ', len(counts))  
+
+for items in counts:
+    i=int(items.text)
+    lst.append(i)
+
+
+
+print('Sum: ', sum(lst))

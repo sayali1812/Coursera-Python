@@ -22,15 +22,28 @@ You will get different results from the geojson and json endpoints so make sure 
 import urllib.request, urllib.parse, urllib.error
 import json
 
-serviceurl = "http://python-data.dr-chuck.net/geojson?"
+
+api_key = False
+# If you have a Google Places API key, enter it here
+# api_key = 'AIzaSy___IDByT70'
+# https://developers.google.com/maps/documentation/geocoding/intro
+
+if api_key is False:
+    api_key = 42
+    serviceurl = 'http://py4e-data.dr-chuck.net/json?'
+else :
+    serviceurl = 'https://maps.googleapis.com/maps/api/geocode/json?'
+
 
 while True:
 
     address = input("Enter location: ")
-
     if len(address) < 1 : break
+    parms = dict()
+    parms['address'] = address
+    if api_key is not False: parms['key'] = api_key
 
-    url = serviceurl + urllib.parse.urlencode({'sensor':'false','address':address})
+    url = serviceurl + urllib.parse.urlencode(parms)
 
     print('Retrieving',url)
 
@@ -38,12 +51,20 @@ while True:
     data = uh.read()
     print('Retrived',len(data),'characters')
 
-    try: js = json.loads(str(data))
-    except: js = None
+    try:
+        js = json.loads(data)
+    except:
+        js = None
+
     if not js or 'status' not in js or js['status'] != 'OK':
         print('==== Failure To Retrieve ====')
         print(data)
         continue
 
-    placeid = js["results"][0]['place_id']
-    print("Place id",placeid)
+    print(json.dumps(js, indent=4))
+ 
+
+  
+
+    place_id = js["results"][0]['place_id']
+    print("Place id",place_id)

@@ -13,6 +13,8 @@ Data Format
 import json
 import urllib
 
+lst=list()
+
 serviceurl = 'http://python-data.dr-chuck.net/comments_42.json'
 
 while True:
@@ -28,6 +30,5 @@ while True:
     print js.dumps(js, indent = 4)
 
     js = ["comment"][0]["count"]
-    lst = list()
     lst.append(js)
     print sum(lst)
